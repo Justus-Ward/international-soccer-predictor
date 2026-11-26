@@ -3,228 +3,16 @@ library(dplyr)
 library(tidyr)
 library(purrr)
 library(broom)
+library(bslib)
 
 # Data & model setup
 
-results <- read.csv("results.csv")
+results <- read.csv("results.csv") #Credit to https://github.com/martj42/international_results/blob/master/results.csv
 
 new_results <- results %>%
   filter(date >= as.Date("2022-01-01"))
 
-current_rankings_txt <- "team,points
-Argentina,1970.37
-Spain,1995.88
-France,1948.97
-England,1922.83
-Portugal,1787.85
-Brazil,1804.92
-Morocco,1803.99
-Netherlands,1775.54
-Belgium,1778.36
-Germany,1726.22
-Croatia,1723.05
-Italy,1704.73
-Colombia,1739.89
-Mexico,1754.30
-Senegal,1653.43
-Uruguay,1634.70
-United States,1690.33
-Japan,1673.68
-Switzerland,1710.88
-Iran,1609.85
-Denmark,1619.47
-Turkey,1582.54
-Ecuador,1592.59
-Austria,1598.82
-South Korea,1558.72
-Nigeria,1585.02
-Australia,1581.35
-Algeria,1576.80
-Egypt,1597.04
-Canada,1571.34
-Norway,1651.29
-Ukraine,1549.29
-Ivory Coast,1565.47
-Panama,1478.41
-Russia,1529.60
-Poland,1526.18
-Wales,1516.95
-Sweden,1525.58
-Hungary,1506.39
-Czech Republic,1467.26
-Paraguay,1542.48
-Scotland,1491.22
-Serbia,1502.13
-Cameroon,1481.24
-Tunisia,1426.58
-DR Congo,1495.48
-Slovakia,1473.66
-Greece,1473.19
-Venezuela,1469.18
-Uzbekistan,1409.73
-Chile,1458.20
-Peru,1457.69
-Costa Rica,1456.03
-Romania,1455.89
-Mali,1455.59
-Qatar,1411.06
-Iraq,1404.17
-Republic of Ireland,1441.10
-Slovenia,1441.09
-South Africa,1451.24
-Saudi Arabia,1425.52
-Burkina Faso,1406.99
-Jordan,1350.41
-Bosnia and Herzegovina,1408.93
-Honduras,1378.97
-Albania,1376.03
-Cape Verde,1402.97
-United Arab Emirates,1370.47
-North Macedonia,1369.16
-Northern Ireland,1365.30
-Jamaica,1357.84
-Georgia,1355.26
-Ghana,1387.00
-Iceland,1342.77
-Finland,1341.92
-Israel,1333.90
-Bolivia,1326.00
-Kosovo,1319.12
-Oman,1306.90
-Montenegro,1301.98
-Guinea,1295.60
-Curaçao,1285.64
-Haiti,1264.58
-Syria,1283.05
-New Zealand,1269.80
-Gabon,1272.51
-Bulgaria,1271.68
-Angola,1265.58
-Uganda,1264.09
-Zambia,1255.82
-China,1254.81
-Bahrain,1254.41
-Benin,1252.17
-Thailand,1250.80
-Palestine,1243.71
-Belarus,1242.88
-Guatemala,1238.74
-Luxembourg,1232.82
-Vietnam,1225.68
-El Salvador,1225.34
-Tajikistan,1224.19
-Trinidad and Tobago,1219.59
-Mozambique,1218.62
-Madagascar,1202.69
-Equatorial Guinea,1195.20
-Kyrgyzstan,1192.16
-Armenia,1189.63
-Comoros,1187.91
-Kenya,1185.08
-Libya,1182.08
-Kazakhstan,1180.78
-Tanzania,1180.27
-Mauritania,1176.68
-Niger,1175.33
-Lebanon,1172.22
-Gambia,1159.64
-Sudan,1157.22
-Indonesia,1157.14
-Togo,1152.76
-North Korea,1151.05
-Namibia,1148.84
-Sierra Leone,1147.56
-Faroe Islands,1136.59
-Cyprus,1133.25
-Suriname,1132.43
-Azerbaijan,1132.00
-Estonia,1130.64
-Rwanda,1126.62
-Malawi,1122.05
-Zimbabwe,1119.78
-Nicaragua,1114.63
-Guinea-Bissau,1108.38
-Kuwait,1106.47
-Congo,1105.96
-Philippines,1100.95
-Malaysia,1086.22
-Latvia,1085.66
-India,1084.93
-Central African Republic,1080.82
-Liberia,1080.44
-Turkmenistan,1078.65
-Burundi,1078.01
-Ethiopia,1077.52
-Dominican Republic,1076.50
-Yemen,1065.24
-Lesotho,1064.29
-Botswana,1063.63
-Singapore,1057.95
-Lithuania,1056.85
-Guyana,1049.32
-New Caledonia,1036.95
-St Kitts and Nevis,1036.33
-Solomon Islands,1031.89
-Puerto Rico,1024.30
-Fiji,1024.17
-Hong Kong China,1024.16
-Tahiti,1019.04
-Myanmar,1010.91
-Moldova,1008.24
-Vanuatu,1002.53
-Malta,992.79
-Antigua and Barbuda,986.58
-Grenada,981.82
-Cuba,981.42
-Eswatini,979.01
-St Lucia,976.71
-Bermuda,975.05
-Papua New Guinea,974.90
-Afghanistan,971.20
-South Sudan,970.94
-St Vincent and the Grenadines,968.27
-Andorra,946.43
-Maldives,943.92
-Chinese Taipei,923.78
-Cambodia,922.32
-Montserrat,916.75
-Nepal,914.54
-Mauritius,911.49
-Barbados,909.89
-Belize,907.00
-Bangladesh,902.93
-Dominica,897.69
-Chad,896.85
-Eritrea,887.06
-Laos,885.03
-Cook Islands,877.53
-Sri Lanka,876.86
-Samoa,876.41
-Aruba,875.61
-Mongolia,874.47
-American Samoa,871.61
-Bhutan,870.81
-Macau,858.03
-Brunei Darussalam,857.73
-São Tomé and Príncipe,855.44
-Djibouti,853.58
-Cayman Islands,850.06
-Somalia,839.17
-Pakistan,837.15
-Tonga,835.64
-Timor-Leste,831.00
-Gibraltar,820.26
-Guam,819.54
-Seychelles,804.16
-Turks and Caicos Islands,803.98
-Liechtenstein,797.70
-Bahamas,786.82
-US Virgin Islands,779.76
-British Virgin Islands,777.41
-Anguilla,760.25
-San Marino,721.20"
-
-current_rankings <- read.csv(text = current_rankings_txt)
+current_rankings <- read.csv("fifa_rankings.csv")
 
 new_results <- new_results |>
   left_join(current_rankings |> select(team, points), by = c("home_team" = "team")) |>
@@ -312,48 +100,106 @@ ko_winner <- function(t1, t2) {
 all_teams <- sort(unique(team_coeffs$team))
 
 # UI 
+# ---------------- PART 1: theme + css ----------------
 
-ui <- fluidPage(
-  titlePanel("International Soccer Predictor"),
-             br(),
-             sidebarLayout(
-               sidebarPanel(
-                 selectInput("home_team", "Home Team", choices = all_teams, selected = "United States"),
-                 selectInput("away_team", "Away Team", choices = all_teams, selected = "Mexico"),
-                 actionButton("predict", "Predict", class = "btn-primary", width = "100%")
-               ),
-               mainPanel(
-                 tags$style(HTML("
-            .match-header { display:flex; align-items:center; justify-content:center; gap:32px; margin:24px 0 8px 0; font-family:sans-serif; }
-            .team-block { display:flex; flex-direction:column; align-items:center; gap:6px; }
-            .team-name { font-size:15px; font-weight:600; color:#333; }
-            .team-prob { font-size:22px; font-weight:700; color:#2c7be5; }
-            .vs-block { display:flex; flex-direction:column; align-items:center; gap:4px; color:#888; }
-            .vs-label { font-size:13px; font-weight:500; }
-            .draw-prob { font-size:18px; font-weight:600; color:#888; }
-            .matrix-wrap { overflow-x:auto; margin-top:16px; }
-            .matrix-wrap table { border-collapse:collapse; font-size:13px; font-family:monospace; }
-            .matrix-wrap th, .matrix-wrap td { border:1px solid #ddd; padding:5px 9px; text-align:center; }
-            .matrix-wrap th { background:#f5f5f5; font-weight:600; }
-            .matrix-wrap .dim-header { background:#e8f0fe; font-weight:700; font-size:14px; }
-            .scoreboard { display:flex; align-items:center; justify-content:center; gap:24px; margin:20px 0; font-family:sans-serif; }
-            .sb-team { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:120px; }
-            .sb-left { align-items:flex-end; }
-            .sb-right { align-items:flex-start; }
-            .sb-score { display:flex; align-items:center; gap:10px; background:#1a1a2e; color:#fff; border-radius:10px; padding:10px 22px; }
-            .sb-num { font-size:32px; font-weight:700; font-variant-numeric:tabular-nums; }
-            .sb-dash { font-size:28px; font-weight:300; color:#aaa; }
-            .section-label { font-size:16px; font-weight:600; color:#444; margin:28px 0 4px 0; border-bottom:2px solid #eee; padding-bottom:4px; }
-          ")),
-                 div(class="section-label", "Win Probabilities"),
-                 htmlOutput("prob_display"),
-                 div(class="section-label", "Projected Goals"),
-                 htmlOutput("goals_display"),
-                 div(class="section-label", "Scoreline Probability Matrix (in %)"),
-                 htmlOutput("matrix_display")
-               )
-             )
-    )
+app_theme <- bs_theme(
+  version      = 5,
+  bg           = "#f4f6fa",
+  fg           = "#1a1f2b",
+  primary      = "#1b6ef3",
+  base_font    = font_google("Inter"),
+  heading_font = font_google("Poppins"),
+  "border-radius" = "0.75rem"
+)
+# If font_google() ever fails on deploy, use:
+# base_font = font_collection("system-ui", "Segoe UI", "sans-serif")
+
+app_css <- "
+  .card { border: none; box-shadow: 0 1px 3px rgba(16,24,40,.08), 0 6px 16px rgba(16,24,40,.05); }
+  .card-header { font-weight: 600; background: transparent; border-bottom: 1px solid #e8ecf2; }
+  .bslib-sidebar-layout > .sidebar { background: #fff; }
+
+  /* flags */
+  .flag img { border-radius: 6px !important; box-shadow: 0 2px 8px rgba(16,24,40,.25); }
+
+  /* matchup header */
+  .matchup { display:flex; align-items:center; justify-content:center; gap:40px; padding:12px 0 4px; }
+  .mu-team { display:flex; flex-direction:column; align-items:center; gap:8px; min-width:140px; }
+  .mu-name { font-size:16px; font-weight:600; text-align:center; }
+  .mu-prob { font-size:34px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; }
+  .mu-prob.home { color:#1b6ef3; }
+  .mu-prob.away { color:#f97316; }
+  .mu-mid { display:flex; flex-direction:column; align-items:center; gap:4px; color:#8a94a6; }
+  .mu-draw-label { font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
+  .mu-draw { font-size:22px; font-weight:600; font-variant-numeric:tabular-nums; }
+
+  /* stacked probability bar */
+  .prob-bar { display:flex; height:30px; border-radius:999px; overflow:hidden; margin:16px 8px 6px; background:#e8ecf2; }
+  .prob-bar .seg { display:flex; align-items:center; justify-content:center; color:#fff;
+                   font-size:12px; font-weight:600; transition:width .4s ease; }
+  .seg.home { background:#1b6ef3; } .seg.draw { background:#9aa4b2; } .seg.away { background:#f97316; }
+
+  /* scoreboard */
+  .scoreboard { display:flex; align-items:center; justify-content:center; gap:28px; padding:8px 0; }
+  .sb-team { display:flex; flex-direction:column; align-items:center; gap:6px; min-width:130px; }
+  .sb-score { display:flex; align-items:center; gap:14px; color:#fff; border-radius:14px; padding:12px 28px;
+              background:linear-gradient(135deg,#1a1a2e,#2b2d57); box-shadow:0 6px 18px rgba(26,26,46,.35); }
+  .sb-num { font-size:36px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .sb-dash { font-size:28px; font-weight:300; color:#aab; }
+  .sb-caption { text-align:center; color:#8a94a6; font-size:12px; margin-top:2px; }
+
+  /* matrix heatmap */
+  .matrix-wrap { overflow-x:auto; }
+  .matrix-wrap table { border-collapse:separate; border-spacing:3px; font-size:13px; margin:0 auto; }
+  .matrix-wrap th, .matrix-wrap td { padding:7px 10px; text-align:center; border-radius:6px; min-width:44px;
+                                     font-variant-numeric:tabular-nums; }
+  .matrix-wrap th { background:#eef1f6; font-weight:600; }
+  .matrix-wrap .dim-header { background:#e3ecfd; color:#1b4fb3; font-weight:700; }
+  .matrix-wrap td.best { outline:2px solid #f97316; outline-offset:1px; font-weight:700; }
+  .matrix-note { text-align:center; color:#6b7686; font-size:13px; margin-bottom:10px; }
+
+  .empty-state { text-align:center; color:#8a94a6; padding:56px 12px; }
+  .empty-state .big { font-size:44px; }
+
+  @media (max-width: 640px) {
+    .matchup { gap:16px; } .mu-team { min-width:90px; } .mu-prob { font-size:26px; }
+    .sb-score { padding:10px 16px; } .sb-num { font-size:28px; }
+  }
+"
+
+
+# ---------------- PART 2: ui ----------------
+
+ui <- page_sidebar(
+  title     = "International Soccer Predictor",
+  theme     = app_theme,
+  fillable  = FALSE,
+  sidebar   = sidebar(
+    width = 320,
+    selectInput("home_team", "Home team", choices = all_teams, selected = "United States"),
+    selectInput("away_team", "Away team", choices = all_teams, selected = "Mexico"),
+    actionButton("swap", "\u21C4  Swap teams", class = "btn-outline-secondary btn-sm w-100"),
+    actionButton("predict", "Predict match", class = "btn-primary w-100")
+  ),
+  tags$head(tags$style(HTML(app_css))),
+  
+  # shown before the first prediction
+  conditionalPanel(
+    "input.predict == 0",
+    card(div(class = "empty-state",
+             div(class = "big", "\u26BD"),
+             h4("Select two teams and Predict"),
+             p("You'll get win probabilities, projected goals and a scoreline matrix.")))
+  ),
+  
+  # shown after the first prediction
+  conditionalPanel(
+    "input.predict > 0",
+    card(card_header("Win probabilities"), htmlOutput("prob_display")),
+    card(card_header("Projected goals"),   htmlOutput("goals_display")),
+    card(card_header("Scoreline probability matrix (in %)"), htmlOutput("matrix_display"))
+  )
+)
 
 
 # Server 
@@ -376,182 +222,176 @@ server <- function(input, output, session) {
   })
   
   # Flag helper
-  team_flag <- function(team, size = 48) {
-    codes <- c(
-      "Afghanistan"="af","Albania"="al","Algeria"="dz","Angola"="ao",
-      "Antigua and Barbuda"="ag","Argentina"="ar","Armenia"="am","Aruba"="aw",
-      "Australia"="au","Austria"="at","Azerbaijan"="az","Bahamas"="bs",
-      "Bahrain"="bh","Bangladesh"="bd","Barbados"="bb","Belarus"="by",
-      "Belgium"="be","Belize"="bz","Benin"="bj","Bhutan"="bt","Bolivia"="bo",
-      "Bosnia and Herzegovina"="ba","Botswana"="bw","Brazil"="br",
-      "Brunei Darussalam"="bn","Bulgaria"="bg","Burkina Faso"="bf",
-      "Burundi"="bi","Cambodia"="kh","Cameroon"="cm","Canada"="ca",
-      "Cape Verde"="cv","Central African Republic"="cf","Chad"="td",
-      "Chile"="cl","China"="cn","Colombia"="co","Comoros"="km","Congo"="cg",
-      "Costa Rica"="cr","Croatia"="hr","Cuba"="cu","Curaçao"="cw",
-      "Cyprus"="cy","Czech Republic"="cz","Denmark"="dk","Djibouti"="dj",
-      "Dominican Republic"="do","DR Congo"="cd","Ecuador"="ec","Egypt"="eg",
-      "El Salvador"="sv","England"="gb-eng","Equatorial Guinea"="gq",
-      "Eritrea"="er","Estonia"="ee","Eswatini"="sz","Ethiopia"="et",
-      "Faroe Islands"="fo","Fiji"="fj","Finland"="fi","France"="fr",
-      "Gabon"="ga","Gambia"="gm","Georgia"="ge","Germany"="de","Ghana"="gh",
-      "Greece"="gr","Guatemala"="gt","Guinea"="gn","Guinea-Bissau"="gw",
-      "Guyana"="gy","Haiti"="ht","Honduras"="hn","Hong Kong China"="hk",
-      "Hungary"="hu","Iceland"="is","India"="in","Indonesia"="id","Iran"="ir",
-      "Iraq"="iq","Republic of Ireland"="ie","Israel"="il","Italy"="it",
-      "Ivory Coast"="ci","Jamaica"="jm","Japan"="jp","Jordan"="jo",
-      "Kazakhstan"="kz","Kenya"="ke","Kosovo"="xk","Kuwait"="kw",
-      "Kyrgyzstan"="kg","Laos"="la","Latvia"="lv","Lebanon"="lb",
-      "Lesotho"="ls","Liberia"="lr","Libya"="ly","Liechtenstein"="li",
-      "Lithuania"="lt","Luxembourg"="lu","Macau"="mo","Madagascar"="mg",
-      "Malawi"="mw","Malaysia"="my","Maldives"="mv","Mali"="ml","Malta"="mt",
-      "Mauritania"="mr","Mauritius"="mu","Mexico"="mx","Moldova"="md",
-      "Mongolia"="mn","Montenegro"="me","Morocco"="ma","Mozambique"="mz",
-      "Myanmar"="mm","Namibia"="na","Nepal"="np","Netherlands"="nl",
-      "New Zealand"="nz","Nicaragua"="ni","Niger"="ne","Nigeria"="ng",
-      "North Korea"="kp","North Macedonia"="mk","Northern Ireland"="gb-nir",
-      "Norway"="no","Oman"="om","Pakistan"="pk","Palestine"="ps",
-      "Panama"="pa","Paraguay"="py","Peru"="pe","Philippines"="ph",
-      "Poland"="pl","Portugal"="pt","Qatar"="qa","Romania"="ro","Russia"="ru",
-      "Rwanda"="rw","Saudi Arabia"="sa","Scotland"="gb-sct","Senegal"="sn",
-      "Serbia"="rs","Sierra Leone"="sl","Singapore"="sg","Slovakia"="sk",
-      "Slovenia"="si","Somalia"="so","South Africa"="za","South Korea"="kr",
-      "South Sudan"="ss","Spain"="es","Sri Lanka"="lk","Sudan"="sd",
-      "Suriname"="sr","Sweden"="se","Switzerland"="ch","Syria"="sy",
-      "Tajikistan"="tj","Tanzania"="tz","Thailand"="th","Togo"="tg",
-      "Trinidad and Tobago"="tt","Tunisia"="tn","Turkey"="tr",
-      "Turkmenistan"="tm","Uganda"="ug","Ukraine"="ua",
-      "United Arab Emirates"="ae","United States"="us","Uruguay"="uy",
-      "Uzbekistan"="uz","Venezuela"="ve","Vietnam"="vn","Wales"="gb-wls",
-      "Yemen"="ye","Zambia"="zm","Zimbabwe"="zw"
-    )
-    code <- codes[team]
-    if (is.na(code)) return(paste0('<span style="font-size:', round(size*0.75), 'px">&#127987;</span>'))
-    paste0('<img src="https://flagcdn.com/', size, 'x', round(size*0.75), '/', tolower(code),
-           '.png" style="border-radius:2px;vertical-align:middle" alt="', team, '">')
-  }
-  
-  
+  flag_codes <- c(
+    "Afghanistan"="af","Albania"="al","Algeria"="dz","American Samoa"="as",
+    "Andorra"="ad","Angola"="ao","Anguilla"="ai","Antigua and Barbuda"="ag",
+    "Argentina"="ar","Armenia"="am","Aruba"="aw","Australia"="au",
+    "Austria"="at","Azerbaijan"="az","Bahamas"="bs","Bahrain"="bh",
+    "Bangladesh"="bd","Barbados"="bb","Belarus"="by","Belgium"="be",
+    "Belize"="bz","Benin"="bj","Bermuda"="bm","Bhutan"="bt","Bolivia"="bo",
+    "Bosnia and Herzegovina"="ba","Botswana"="bw","Brazil"="br",
+    "British Virgin Islands"="vg","Brunei"="bn","Bulgaria"="bg",
+    "Burkina Faso"="bf","Burundi"="bi","Cambodia"="kh","Cameroon"="cm",
+    "Canada"="ca","Cape Verde"="cv","Cayman Islands"="ky",
+    "Central African Republic"="cf","Chad"="td","Chile"="cl","China"="cn",
+    "Colombia"="co","Comoros"="km","Congo"="cg","Cook Islands"="ck",
+    "Costa Rica"="cr","Croatia"="hr","Cuba"="cu","Curaçao"="cw",
+    "Cyprus"="cy","Czechia"="cz","Denmark"="dk","Djibouti"="dj",
+    "Dominica"="dm","Dominican Republic"="do","DR Congo"="cd",
+    "East Timor"="tl","Ecuador"="ec","Egypt"="eg","El Salvador"="sv",
+    "England"="gb-eng","Equatorial Guinea"="gq","Eritrea"="er",
+    "Estonia"="ee","Eswatini"="sz","Ethiopia"="et","Faroe Islands"="fo",
+    "Fiji"="fj","Finland"="fi","France"="fr","Gabon"="ga","Gambia"="gm",
+    "Georgia"="ge","Germany"="de","Ghana"="gh","Gibraltar"="gi",
+    "Greece"="gr","Grenada"="gd","Guam"="gu","Guatemala"="gt","Guinea"="gn",
+    "Guinea-Bissau"="gw","Guyana"="gy","Haiti"="ht","Honduras"="hn",
+    "Hong Kong"="hk","Hungary"="hu","Iceland"="is","India"="in",
+    "Indonesia"="id","Iran"="ir","Iraq"="iq","Ireland"="ie","Israel"="il",
+    "Italy"="it","Ivory Coast"="ci","Jamaica"="jm","Japan"="jp",
+    "Jordan"="jo","Kazakhstan"="kz","Kenya"="ke","Kosovo"="xk",
+    "Kuwait"="kw","Kyrgyzstan"="kg","Laos"="la","Latvia"="lv",
+    "Lebanon"="lb","Lesotho"="ls","Liberia"="lr","Libya"="ly",
+    "Liechtenstein"="li","Lithuania"="lt","Luxembourg"="lu","Macau"="mo",
+    "Madagascar"="mg","Malawi"="mw","Malaysia"="my","Maldives"="mv",
+    "Mali"="ml","Malta"="mt","Mauritania"="mr","Mauritius"="mu",
+    "Mexico"="mx","Moldova"="md","Mongolia"="mn","Montenegro"="me",
+    "Montserrat"="ms","Morocco"="ma","Mozambique"="mz","Myanmar"="mm",
+    "Namibia"="na","Nepal"="np","Netherlands"="nl","New Caledonia"="nc",
+    "New Zealand"="nz","Nicaragua"="ni","Niger"="ne","Nigeria"="ng",
+    "North Korea"="kp","North Macedonia"="mk","Northern Ireland"="gb-nir",
+    "Norway"="no","Oman"="om","Pakistan"="pk","Palestine"="ps",
+    "Panama"="pa","Papua New Guinea"="pg","Paraguay"="py","Peru"="pe",
+    "Philippines"="ph","Poland"="pl","Portugal"="pt","Puerto Rico"="pr",
+    "Qatar"="qa","Romania"="ro","Russia"="ru","Rwanda"="rw",
+    "Saint Kitts and Nevis"="kn","Saint Lucia"="lc","Samoa"="ws",
+    "San Marino"="sm","Sao Tome and Principe"="st","Saudi Arabia"="sa",
+    "Scotland"="gb-sct","Senegal"="sn","Serbia"="rs","Seychelles"="sc",
+    "Sierra Leone"="sl","Singapore"="sg","Slovakia"="sk","Slovenia"="si",
+    "Solomon Islands"="sb","Somalia"="so","South Africa"="za",
+    "South Korea"="kr","South Sudan"="ss","Spain"="es","Sri Lanka"="lk",
+    "St Vincent & Grenadines"="vc","Sudan"="sd","Suriname"="sr",
+    "Sweden"="se","Switzerland"="ch","Syria"="sy","Tahiti"="pf",
+    "Taiwan"="tw","Tajikistan"="tj","Tanzania"="tz","Thailand"="th",
+    "Togo"="tg","Tonga"="to","Trinidad and Tobago"="tt","Tunisia"="tn",
+    "Turkey"="tr","Turkmenistan"="tm","Turks and Caicos Islands"="tc",
+    "Uganda"="ug","Ukraine"="ua","United Arab Emirates"="ae",
+    "United States"="us","Uruguay"="uy","US Virgin Islands"="vi",
+    "Uzbekistan"="uz","Vanuatu"="vu","Venezuela"="ve","Vietnam"="vn",
+    "Wales"="gb-wls","Yemen"="ye","Zambia"="zm","Zimbabwe"="zw"
+  )
   
   # Returns just the ISO code for use in bracket img tags
   team_flag_code <- function(team) {
-    codes <- c(
-      "Afghanistan"="af","Albania"="al","Algeria"="dz","Angola"="ao",
-      "Antigua and Barbuda"="ag","Argentina"="ar","Armenia"="am","Aruba"="aw",
-      "Australia"="au","Austria"="at","Azerbaijan"="az","Bahamas"="bs",
-      "Bahrain"="bh","Bangladesh"="bd","Barbados"="bb","Belarus"="by",
-      "Belgium"="be","Belize"="bz","Benin"="bj","Bhutan"="bt","Bolivia"="bo",
-      "Bosnia and Herzegovina"="ba","Botswana"="bw","Brazil"="br",
-      "Brunei Darussalam"="bn","Bulgaria"="bg","Burkina Faso"="bf",
-      "Burundi"="bi","Cambodia"="kh","Cameroon"="cm","Canada"="ca",
-      "Cape Verde"="cv","Central African Republic"="cf","Chad"="td",
-      "Chile"="cl","China"="cn","Colombia"="co","Comoros"="km","Congo"="cg",
-      "Costa Rica"="cr","Croatia"="hr","Cuba"="cu","Curaçao"="cw",
-      "Cyprus"="cy","Czech Republic"="cz","Denmark"="dk","Djibouti"="dj",
-      "Dominican Republic"="do","DR Congo"="cd","Ecuador"="ec","Egypt"="eg",
-      "El Salvador"="sv","England"="gb-eng","Equatorial Guinea"="gq",
-      "Eritrea"="er","Estonia"="ee","Eswatini"="sz","Ethiopia"="et",
-      "Faroe Islands"="fo","Fiji"="fj","Finland"="fi","France"="fr",
-      "Gabon"="ga","Gambia"="gm","Georgia"="ge","Germany"="de","Ghana"="gh",
-      "Greece"="gr","Guatemala"="gt","Guinea"="gn","Guinea-Bissau"="gw",
-      "Guyana"="gy","Haiti"="ht","Honduras"="hn","Hong Kong China"="hk",
-      "Hungary"="hu","Iceland"="is","India"="in","Indonesia"="id","Iran"="ir",
-      "Iraq"="iq","Republic of Ireland"="ie","Israel"="il","Italy"="it",
-      "Ivory Coast"="ci","Jamaica"="jm","Japan"="jp","Jordan"="jo",
-      "Kazakhstan"="kz","Kenya"="ke","Kosovo"="xk","Kuwait"="kw",
-      "Kyrgyzstan"="kg","Laos"="la","Latvia"="lv","Lebanon"="lb",
-      "Lesotho"="ls","Liberia"="lr","Libya"="ly","Liechtenstein"="li",
-      "Lithuania"="lt","Luxembourg"="lu","Macau"="mo","Madagascar"="mg",
-      "Malawi"="mw","Malaysia"="my","Maldives"="mv","Mali"="ml","Malta"="mt",
-      "Mauritania"="mr","Mauritius"="mu","Mexico"="mx","Moldova"="md",
-      "Mongolia"="mn","Montenegro"="me","Morocco"="ma","Mozambique"="mz",
-      "Myanmar"="mm","Namibia"="na","Nepal"="np","Netherlands"="nl",
-      "New Zealand"="nz","Nicaragua"="ni","Niger"="ne","Nigeria"="ng",
-      "North Korea"="kp","North Macedonia"="mk","Northern Ireland"="gb-nir",
-      "Norway"="no","Oman"="om","Pakistan"="pk","Palestine"="ps",
-      "Panama"="pa","Paraguay"="py","Peru"="pe","Philippines"="ph",
-      "Poland"="pl","Portugal"="pt","Qatar"="qa","Romania"="ro","Russia"="ru",
-      "Rwanda"="rw","Saudi Arabia"="sa","Scotland"="gb-sct","Senegal"="sn",
-      "Serbia"="rs","Sierra Leone"="sl","Singapore"="sg","Slovakia"="sk",
-      "Slovenia"="si","Somalia"="so","South Africa"="za","South Korea"="kr",
-      "South Sudan"="ss","Spain"="es","Sri Lanka"="lk","Sudan"="sd",
-      "Suriname"="sr","Sweden"="se","Switzerland"="ch","Syria"="sy",
-      "Tajikistan"="tj","Tanzania"="tz","Thailand"="th","Togo"="tg",
-      "Trinidad and Tobago"="tt","Tunisia"="tn","Turkey"="tr",
-      "Turkmenistan"="tm","Uganda"="ug","Ukraine"="ua",
-      "United Arab Emirates"="ae","United States"="us","Uruguay"="uy",
-      "Uzbekistan"="uz","Venezuela"="ve","Vietnam"="vn","Wales"="gb-wls",
-      "Yemen"="ye","Zambia"="zm","Zimbabwe"="zw"
-    )
-    code <- codes[team]
-    if (is.na(code)) return("") else tolower(code)
+    code <- unname(flag_codes[team])
+    ifelse(is.na(code), "", tolower(code))
   }
   
+  team_flag <- function(team, size = 48) {
+    code <- unname(flag_codes[team])
+    ifelse(
+      is.na(code),
+      paste0('<span style="font-size:', round(size * 0.75), 'px">&#127987;</span>'),
+      paste0('<img src="https://flagcdn.com/', size, 'x', round(size * 0.75), '/', tolower(code),
+             '.png" style="border-radius:2px;vertical-align:middle" alt="', team, '">')
+    )
+  }
   
-  # Match predictor outputs
+  observeEvent(input$swap, {
+    h <- input$home_team
+    a <- input$away_team
+    updateSelectInput(session, "home_team", selected = a)
+    updateSelectInput(session, "away_team", selected = h)
+  })
+  
   output$prob_display <- renderUI({
     r  <- result()
-    hw <- paste0(round(r$probs$home_win * 100, 1), "%")
-    dr <- paste0(round(r$probs$draw     * 100, 1), "%")
-    aw <- paste0(round(r$probs$away_win * 100, 1), "%")
+    hp <- r$probs$home_win * 100
+    dp <- r$probs$draw     * 100
+    ap <- r$probs$away_win * 100
+    lab <- function(p) if (p >= 9) paste0(round(p, 1), "%") else ""   # hide label on tiny segments
     HTML(paste0('
-      <div class="match-header">
-        <div class="team-block">
-          <div>', team_flag(r$home), '</div>
-          <div class="team-name">', r$home, '</div>
-          <div class="team-prob">', hw, '</div>
-        </div>
-        <div class="vs-block" style="justify-content:flex-end;padding-bottom:2px">
-          <div class="vs-label">Draw</div>
-          <div class="draw-prob">', dr, '</div>
-        </div>
-        <div class="team-block">
-          <div>', team_flag(r$away), '</div>
-          <div class="team-name">', r$away, '</div>
-          <div class="team-prob">', aw, '</div>
-        </div>
-      </div>'))
+    <div class="matchup">
+      <div class="mu-team">
+        <div class="flag">', team_flag(r$home, 64), '</div>
+        <div class="mu-name">', r$home, '</div>
+        <div class="mu-prob home">', round(hp, 1), '%</div>
+      </div>
+      <div class="mu-mid">
+        <div class="mu-draw-label">Draw</div>
+        <div class="mu-draw">', round(dp, 1), '%</div>
+      </div>
+      <div class="mu-team">
+        <div class="flag">', team_flag(r$away, 64), '</div>
+        <div class="mu-name">', r$away, '</div>
+        <div class="mu-prob away">', round(ap, 1), '%</div>
+      </div>
+    </div>
+    <div class="prob-bar">
+      <div class="seg home" style="width:', hp, '%">', lab(hp), '</div>
+      <div class="seg draw" style="width:', dp, '%">', lab(dp), '</div>
+      <div class="seg away" style="width:', ap, '%">', lab(ap), '</div>
+    </div>'))
   })
   
   output$goals_display <- renderUI({
-    r  <- result()
+    r <- result()
     HTML(paste0('
-      <div class="scoreboard">
-        <div class="sb-team sb-left">
-          <div>', team_flag(r$home), '</div>
-          <div class="team-name">', r$home, '</div>
-        </div>
-        <div class="sb-score">
-          <span class="sb-num">', round(r$goals$lambda, 3), '</span>
-          <span class="sb-dash">&ndash;</span>
-          <span class="sb-num">', round(r$goals$mu, 3), '</span>
-        </div>
-        <div class="sb-team sb-right">
-          <div>', team_flag(r$away), '</div>
-          <div class="team-name">', r$away, '</div>
-        </div>
-      </div>'))
+    <div class="scoreboard">
+      <div class="sb-team">
+        <div class="flag">', team_flag(r$home, 64), '</div>
+        <div class="mu-name">', r$home, '</div>
+      </div>
+      <div class="sb-score">
+        <span class="sb-num">', round(r$goals$lambda, 2), '</span>
+        <span class="sb-dash">&ndash;</span>
+        <span class="sb-num">', round(r$goals$mu, 2), '</span>
+      </div>
+      <div class="sb-team">
+        <div class="flag">', team_flag(r$away, 64), '</div>
+        <div class="mu-name">', r$away, '</div>
+      </div>
+    </div>
+    <div class="sb-caption">Expected goals</div>'))
   })
   
   output$matrix_display <- renderUI({
     r   <- result()
     mat <- r$matrix
-    hf  <- team_flag(r$home, 20)
-    af  <- team_flag(r$away, 20)
+    mat[is.na(mat)] <- 0
     n   <- 0:8
-    hdr1 <- paste0('<tr><th class="dim-header" rowspan="2" style="min-width:110px">',
-                   hf, ' ', r$home, '<br><span style="font-weight:300;font-size:11px">&#8595; goals</span></th>',
+    mx  <- max(mat)
+    best <- which(mat == mx, arr.ind = TRUE)[1, ]
+    
+    cell <- function(v, is_best) {
+      a  <- v / mx
+      bg <- sprintf("rgba(27,110,243,%.3f)", 0.05 + 0.9 * a)
+      fg <- if (a > 0.5) "#fff" else "#1a1f2b"
+      sprintf('<td class="%s" style="background:%s;color:%s">%s</td>',
+              if (is_best) "best" else "", bg, fg, formatC(v, format = "f", digits = 1))
+    }
+    
+    hf <- team_flag(r$home, 20)
+    af <- team_flag(r$away, 20)
+    hdr1 <- paste0('<tr><th class="dim-header" rowspan="2" style="min-width:120px">',
+                   hf, ' ', r$home, '<br><span style="font-weight:400;font-size:11px">&#8595; goals</span></th>',
                    '<th class="dim-header" colspan="9">', af, ' ', r$away, ' &#8594; goals</th></tr>')
-    hdr2 <- paste0('<tr>', paste0('<th>', n, '</th>', collapse=''), '</tr>')
-    rows <- paste0(sapply(seq_len(nrow(mat)), function(i) {
-      paste0('<tr><th>', n[i], '</th>',
-             paste0('<td>', mat[i,], '</td>', collapse=''), '</tr>')
-    }), collapse='')
-    HTML(paste0('<div class="matrix-wrap"><table><thead>', hdr1, hdr2,
-                '</thead><tbody>', rows, '</tbody></table></div>'))
+    hdr2 <- paste0('<tr>', paste0('<th>', n, '</th>', collapse = ''), '</tr>')
+    rows <- vapply(seq_len(nrow(mat)), function(i) {
+      cells <- vapply(seq_len(ncol(mat)),
+                      function(j) cell(mat[i, j], i == best[1] && j == best[2]),
+                      character(1))
+      paste0('<tr><th>', n[i], '</th>', paste(cells, collapse = ''), '</tr>')
+    }, character(1))
+    
+    HTML(paste0(
+      '<div class="matrix-note">Most likely scoreline: <b>', n[best[1]], ' &ndash; ', n[best[2]],
+      '</b> (', formatC(mx, format = "f", digits = 1), '%)</div>',
+      '<div class="matrix-wrap"><table><thead>', hdr1, hdr2, '</thead><tbody>',
+      paste(rows, collapse = ''), '</tbody></table></div>'))
   })
   
-
-  }
+  
+  
+}
 
 shinyApp(ui, server)
